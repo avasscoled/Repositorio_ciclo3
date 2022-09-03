@@ -49,11 +49,13 @@ public class MovimientoDinero {
         this.concepto = concepto;
     }
 
-    public Empleado getUsuario() {
+    public Empleado getUsuario()
+    {
         return usuario;
     }
 
     public void setUsuario(Empleado empleado) {
+
         this.usuario = empleado;
     }
 }

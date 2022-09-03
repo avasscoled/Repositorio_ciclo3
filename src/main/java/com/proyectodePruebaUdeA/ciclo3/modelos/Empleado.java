@@ -1,17 +1,15 @@
 package com.proyectodePruebaUdeA.ciclo3.modelos;
 
 import javax.persistence.*;
-import javax.persistence.GenerationType;
 
 @Entity
 @Table(name="Empleado")
 public class Empleado {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
     private String nombre;
     private String correo;
-
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
@@ -66,5 +64,4 @@ public class Empleado {
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
-
 }
