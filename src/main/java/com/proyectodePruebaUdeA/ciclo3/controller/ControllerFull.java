@@ -52,7 +52,15 @@ public class ControllerFull {
             return "redirect:/VerEmpresas";
         }
         return "redirect:/EditarEmpresa";
-
+    }
+    @GetMapping("/EliminarEmpresa/{id}")
+    public String eliminarEmpresa(@PathVariable Integer id){
+        try {
+            empresaService.deleteEmpresa(id);
+        }catch (Exception e){
+            return "redirect:/VerEmpresas";
+        }
+            return "redirect:/VerEmpresas";
     }
 
 }
