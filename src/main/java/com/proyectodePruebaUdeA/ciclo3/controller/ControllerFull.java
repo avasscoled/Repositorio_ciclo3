@@ -1,8 +1,10 @@
 package com.proyectodePruebaUdeA.ciclo3.controller;
 import com.proyectodePruebaUdeA.ciclo3.modelos.Empleado;
 import com.proyectodePruebaUdeA.ciclo3.modelos.Empresa;
+import com.proyectodePruebaUdeA.ciclo3.modelos.MovimientoDinero;
 import com.proyectodePruebaUdeA.ciclo3.service.EmpleadoService;
 import com.proyectodePruebaUdeA.ciclo3.service.EmpresaService;
+import com.proyectodePruebaUdeA.ciclo3.service.MovimientosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,8 @@ public class ControllerFull {
     EmpresaService empresaService;
     @Autowired
     EmpleadoService empleadoService;
+    @Autowired
+    MovimientosService movimientosService;
 
   //EMPRESAS
 
@@ -85,8 +89,40 @@ public class ControllerFull {
         boolean respuesta = this.empleadoService.deleteEmpleado(id);
         if (respuesta) { //Si respuesta es true?
             return "Se elimino el empleado correctamente  con id" + id;
-        } else {
+        }
             return "No se pudo eliminar el empleado con id" + id;
         }
+        //MOVIMIENTOS
+       @GetMapping("/movimientos")//Consultar todos los movimientos
+       public List<MovimientoDinero> verMovimientos(){
+        return movimientosService.getAllMovimientos();
+       }
+
+       @PostMapping("/movimientos")
+       public MovimientoDinero guardarMovimiento(@RequestBody MovimientoDinero movimiento){
+        return movimientosService.saveOrUpdateMovimiento(movimiento);
+       }
+
+       @GetMapping("/movimientos/{id}")
+       public MovimientoDinero movimientoPorId(@PathVariable("id") Integer id){
+          return movimientosService.getMovimientoById(id);
+       }
+
+       @PatchMapping("/movimientos/{id}")//Editar o actualizar un movimiento
+       public MovimientoDinero actualizarMovimiento(@PathVariable("id") Integer id, @RequestBody MovimientoDinero movimiento){
+          MovimientoDinero mov=movimientosService.getMovimientoById(id);
+          mov.setConcepto(movimiento.getConcepto());
+          mov.setMonto(movimiento.getMonto());
+          mov.setUsuario(movimiento.getUsuario());
+          return movimientosService.saveOrUpdateMovimiento(mov);
+       }
+       @DeleteMapping("/Movimientos/{id}")
+       public String deleteMovimiento(@PathVariable("id") Integer id){
+        boolean respuesta= movimientosService.deleteMovimiento(id);
+        if (respuesta){
+            return "Se elimino correctamente el movimineto con Id" +id;
+        }
+        return "No Se pudo eliminar el movimineto con Id" +id;
+       }
+
     }
-}
