@@ -1,14 +1,23 @@
 package com.proyectodePruebaUdeA.ciclo3.controller;
+import com.proyectodePruebaUdeA.ciclo3.modelos.Empleado;
 import com.proyectodePruebaUdeA.ciclo3.modelos.Empresa;
+import com.proyectodePruebaUdeA.ciclo3.service.EmpleadoService;
 import com.proyectodePruebaUdeA.ciclo3.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 public class ControllerFull {
-@Autowired
+    @Autowired
     EmpresaService empresaService;
+    @Autowired
+    EmpleadoService empleadoService;
+
+  //EMPRESAS
 
     @GetMapping("/enterprises")
     public List<Empresa> verEmpresa(){
@@ -20,7 +29,7 @@ public class ControllerFull {
     }
 
     @GetMapping(path = "enterprises/{id}")
-    public Empresa empresaPorID8(@PathVariable("id") Integer id){
+    public Empresa empresaPorID(@PathVariable("id") Integer id){
        return this.empresaService.getEmpresaById(id);
     }
 
@@ -41,5 +50,24 @@ public class ControllerFull {
         } else {
             return "No se pudo eliminar la empresa con id" + id;
         }
+    }
+    //EMPLEADOS
+    @GetMapping("/empleados") //Ver los json de todos los empleados
+    public List<Empleado> verEmpleados(){
+        return empleadoService.getAllEmpleado();
+    }
+
+    @PostMapping("/empleados") //Guardar un nuevo empleado
+    public Optional<Empleado> guardarEmpleado(@RequestBody Empleado empl){
+        return Optional.ofNullable(this.empleadoService.saveOrUpDateEmpleado(empl));
+    }
+
+    @GetMapping(path = "empleados/{id}")//Consultar empleado por ID
+    public Optional<Empleado> empleadoPorID(@PathVariable("id") Integer id){
+        return this.empleadoService.getEmpleadoById(id);
+    }
+    @GetMapping("/enterprises/{id}/empleados")//Consultar empleado por empresa
+    public ArrayList<Empleado> EmpleadosPorEmpresa(@PathVariable("id") Integer id){
+        return this.empleadoService.obtenerPorEmpresa(id);
     }
 }
