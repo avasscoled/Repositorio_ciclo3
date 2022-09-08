@@ -70,4 +70,23 @@ public class ControllerFull {
     public ArrayList<Empleado> EmpleadosPorEmpresa(@PathVariable("id") Integer id){
         return this.empleadoService.obtenerPorEmpresa(id);
     }
+
+    @PatchMapping("/empleados/{id}")
+    public Empleado actualizarEmpleado(@PathVariable("id") Integer id, @RequestBody Empleado empleado){
+        Empleado empl=empleadoService.getEmpleadoById(id).get();
+        empl.setNombre(empleado.getNombre());
+        empl.setCorreo(empleado.getCorreo());
+        empl.setEmpresa(empleado.getEmpresa());
+        empl.setRol(empleado.getRol());
+        return empleadoService.saveOrUpDateEmpleado(empl);
+    }
+    @DeleteMapping("/empleados/{id}") //Metodo para eliminar empleado por id
+    public String DeleteEmpleado(@PathVariable("id") Integer id) {
+        boolean respuesta = this.empleadoService.deleteEmpleado(id);
+        if (respuesta) { //Si respuesta es true?
+            return "Se elimino el empleado correctamente  con id" + id;
+        } else {
+            return "No se pudo eliminar el empleado con id" + id;
+        }
+    }
 }
