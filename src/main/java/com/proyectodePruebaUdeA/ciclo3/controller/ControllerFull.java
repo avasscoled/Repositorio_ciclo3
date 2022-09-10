@@ -116,7 +116,7 @@ public class ControllerFull {
           mov.setUsuario(movimiento.getUsuario());
           return movimientosService.saveOrUpdateMovimiento(mov);
        }
-       @DeleteMapping("/Movimientos/{id}")
+       @DeleteMapping("/movimientos/{id}")
        public String deleteMovimiento(@PathVariable("id") Integer id){
         boolean respuesta= movimientosService.deleteMovimiento(id);
         if (respuesta){
@@ -125,4 +125,13 @@ public class ControllerFull {
         return "No Se pudo eliminar el movimineto con Id" +id;
        }
 
+       @GetMapping("/empleados/{id}/movimientos")//Consultar movimiento por id empleado
+       public ArrayList<MovimientoDinero> movimientoPorEmpleado(@PathVariable("id")Integer id){
+        return movimientosService.obtenerPorEmpleado(id);
+
+       }
+       @GetMapping("/enterprises/{id}/movimientos")//Consultar movimientos que pertenecen a una empresa el id
+       public ArrayList<MovimientoDinero> movimientosPorEmpresa(@PathVariable("id")Integer id){
+        return movimientosService.obtenerPorEmpresa(id);
+       }
     }
