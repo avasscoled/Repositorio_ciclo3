@@ -1,6 +1,8 @@
 package com.proyectodePruebaUdeA.ciclo3.controller;
 
+import com.proyectodePruebaUdeA.ciclo3.modelos.Empleado;
 import com.proyectodePruebaUdeA.ciclo3.modelos.Empresa;
+import com.proyectodePruebaUdeA.ciclo3.service.EmpleadoService;
 import com.proyectodePruebaUdeA.ciclo3.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,12 @@ import java.util.List;
 public class ControllerFull {
     @Autowired
     EmpresaService empresaService;
+    @Autowired
+    EmpleadoService empleadoService;
 
-    @GetMapping({"/Empresas","/VerEmpresas"})
+
+    //EMPRESAS
+    @GetMapping({"/","/VerEmpresas"})
     public String viewEmpresas(Model model, @ModelAttribute("mensaje") String mensaje) {
         List<Empresa> listaEmpresas=empresaService.getAllEmpresa();
         model.addAttribute("emplist",listaEmpresas);
@@ -68,7 +74,32 @@ public class ControllerFull {
         }
         redirectAttributes.addFlashAttribute("mensaje","EliminarERROR");
         return "redirect:/VerEmpresas";
-
     }
+   //EMPLEADOS
+   @GetMapping("/VerEmpleados")
+   public String viewEmpleado(Model model, @ModelAttribute("mensaje") String mensaje) {
+       List<Empleado> listaEmpleados=empleadoService.getAllEmpleado();
+       model.addAttribute("emplelist",listaEmpleados);
+       model.addAttribute("mensaje",mensaje);
+       return "VerEmpleados"; //Llamamos al Html
+   }
 
+    @GetMapping("/AgregarEmpleado")
+    public String nuevoEmpleado(Model model, @ModelAttribute("mensaje") String mensaje){
+        Empleado empl= new Empleado();
+        model.addAttribute("empl",empl);
+        model.addAttribute("mensaje", mensaje);
+        List<Empresa> listaEmpresas= empresaService.getAllEmpresa();
+        model.addAttribute("emprelist",listaEmpresas);
+        return "agregarEmpleado"; //Llamar html
+    }
+    @PostMapping("/GuardarEmpleado")
+    public String guardarEmpleado(Empleado empl, RedirectAttributes redirectAttributes){
+        if(empleadoService.saveOrUpDateEmpleado(empl)==true){
+            redirectAttributes.addFlashAttribute("mensaje","GuardarOK");
+            return "redirect:/VerEmpleados";
+        }
+        redirectAttributes.addFlashAttribute("mensaje","GuardarERROR");
+        return "redirect:/AgregarEmpleado";
+    }
 }
