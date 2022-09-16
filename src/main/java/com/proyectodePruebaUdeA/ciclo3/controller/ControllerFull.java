@@ -102,4 +102,38 @@ public class ControllerFull {
         redirectAttributes.addFlashAttribute("mensaje","GuardarERROR");
         return "redirect:/AgregarEmpleado";
     }
+
+    @GetMapping("/EditarEmpleado/{id}")
+    public String editarEmpleado(Model model, @PathVariable Integer id, @ModelAttribute("mensaje") String mensaje){
+        Empleado empl=empleadoService.getEmpleadoById(id).get();
+        model.addAttribute("empl",empl);
+        model.addAttribute("mensaje", mensaje);
+        List<Empresa> listaEmpresas= empresaService.getAllEmpresa();
+        model.addAttribute("emprelist",listaEmpresas);
+        return "editarEmpleado";
+    }
+    @PostMapping("/ActualizarEmpleado")
+    public String updateEmpleado(@ModelAttribute("emp") Empleado empl, RedirectAttributes redirectAttributes){
+        if(empleadoService.saveOrUpDateEmpleado(empl)){
+            redirectAttributes.addFlashAttribute("mensaje","ActualizarOK");
+            return "redirect:/VerEmpleados";
+        }
+        redirectAttributes.addFlashAttribute("mensaje","ActualizarERROR");
+        return "redirect:/EditarEmpleado";
+    }
+    @GetMapping("/EliminarEmpleado/{id}")
+    public String eliminarEmpleado(@PathVariable Integer id, RedirectAttributes redirectAttributes){
+        if (empleadoService.deleteEmpleado(id)==true){
+            redirectAttributes.addFlashAttribute("mensaje","EliminarOK");
+            return "redirect:/VerEmpleados";
+        }
+        redirectAttributes.addFlashAttribute("mensaje","EliminarERROR");
+        return "redirect:/VerEmpleados";
+    }
+    @GetMapping("/Empresa/{id}/Empleados")//Filtrar los empleados por empresas
+    public String verEmpleadosPorEmpresa(@PathVariable("id") Integer id, Model model){
+        List<Empleado> ListaEmpleados = empleadoService.obtenerPorEmpresa(id);
+        model.addAttribute("emplelist", ListaEmpleados);
+        return "verEmpleados"; //Llamanos al html con el emplelist de los empleados filtrados
+    }
 }
