@@ -13,6 +13,7 @@ import java.util.Optional;
 @Service
 public class EmpleadoService {
 
+    public boolean deleteMovimiento;
     @Autowired
     EmpleadoRepository empleadoRepository;
     // Metodo para ver los empleados registrados en la base de datos

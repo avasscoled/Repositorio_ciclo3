@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Lista de Movimientos</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <style>
+        a{
+        color:white;
+        }
+        a:hover {
+        color: black;
+        text-decoration:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+   <h1>Lista de Movimientos</h1>
+    <!--Dibujamos la tabla -->
+    <br><table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Valor</th>
+            <th>Concepto</th>
+            <th>Usuario Responsable</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+        <!--Llenamos la Tabla dibujada -->
+        <!--En nuestro controller, creamos en viewMovimientos un modelo con un atributo llamado movlist donde esta guardada la lista de todos los movimientos -->
+            <tr th:each="movimiento : ${movlist}">
+            <td th:text="${movimiento.id}"></td>
+            <td th:text="${movimiento.monto}"></td>
+            <td th:if="${movimiento.concepto=='1'}">Papeleria</td>
+            <td th:if="${movimiento.concepto=='2'}">Caja Menor</td>
+            <td th:if="${movimiento.concepto=='3'}">Servivios Publicos/Privados</td>
+            <td th:if="${movimiento.concepto=='4'}">Tributario</td>
+            <td th:if="${movimiento.concepto=='5'}">Moviliario</td>
+            <td th:if="${movimiento.concepto=='6'}">Nomina</td>
+            <td th:if="${movimiento.concepto=='7'}">Operativo</td>
+            <td th:text="${movimiento.usuario.nombre}"></td>
+            <td><button type="button" class="btn btn-warning"><a th:href="@{/EditarMovimiento/{id}(id=${movimiento.id})}">Editar</a></button></td>
+            <td><button type="button" class="btn btn-danger"><a  th:href="@{/EliminarMovimiento/{id}(id=${movimiento.id})}">Eliminar</a></button></td>
+        </tr>
+    </table>
+
+    <!-- Creamos un boton que sirva para agregar nuevos movimientos -->
+    <button type="button" class="btn btn-info"><a th:href="@{/AgregarMovimiento}">Agregar Nuevo Movimiento</a></button>
+    <br><br>
+    <!-- Boton que nos lleva a la lista de empresas -->
+    <button type="button" class="btn btn-primary"><a th:href="@{/VerEmpresas}">Ver Lista de Empresas</a></button>
+    <br><br>
+    <!-- Boton que nos lleva a la lista de empleados -->
+    <button type="button" class="btn btn-primary"><a th:href="@{/VerEmpleados}">Ver Lista de Empleados</a></button>
+</div>
+
+<script th:inline="javascript">
+    window.onload=function(){
+
+    var msg=[[${mensaje}]];
+    if (msg =="GuardarOK"){
+        Command : toastr["success"]("Movimiento creado con exito!")
+        }
+    else if (msg == "ActualizarOK"){
+        Command : toastr["success"]("Movimiento actualizado con exito!")
+        }
+    else if (msg == "EliminarOK"){
+        Command : toastr["error"]("Movimiento eliminado con exito!")
+        }
+    else if (msg == "EliminarERROR"){
+        Command : toastr["error"]("Movimiento no ha sido eliminada!")
+    }
+    toastr.options={
+        "positionClass": "toast-top-rigth",
+        "showDuration": "300",
+        "showMethod":"FadeIn",
+        "hideMethod":"FadeOut",
+    }
+
+    }
+</script>
+
+
+</body>
+</html>
