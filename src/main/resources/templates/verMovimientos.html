@@ -53,6 +53,14 @@
         </tr>
     </table>
 
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="col-md-3" for="SumaMontos">Total Movimientos:</label>
+            <div class="col-md-6">
+                <p th:text="${#numbers.formatCurrency(SumaMontos)}" class="form-control" id="SumaMontos"></p>
+            </div>
+        </div>
+    </div>
     <!-- Creamos un boton que sirva para agregar nuevos movimientos -->
     <button type="button" class="btn btn-info"><a th:href="@{/AgregarMovimiento}">Agregar Nuevo Movimiento</a></button>
     <br><br>

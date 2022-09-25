@@ -45,4 +45,19 @@ public class MovimientosService {
     public ArrayList<MovimientoDinero> obtenerPorEmpresa(Integer id){
         return movimientosRepository.findByEmpresa(id);
     }
+
+       //Servicio para ver la suma de todos los montos
+       public long obtenerSumaMontos(){
+          return movimientosRepository.SumarMonto();
+       }
+
+    //Servicio para ver la suma de todos los montos por empleado
+    public long MontosPorEmpleado(Integer id){
+        return movimientosRepository.MontosPorEmpleado(id);
+    }
+
+    //Servicio para ver la suma de todos los montos por empresa
+    public long MontosPorEmpresa(Integer id){
+        return movimientosRepository.MontosPorEmpresas(id);
+    }
 }

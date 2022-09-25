@@ -147,6 +147,8 @@ public class ControllerFull {
         List<MovimientoDinero> listaMovimientos=movimientosService.getAllMovimientos();
         model.addAttribute("movlist",listaMovimientos);
         model.addAttribute("mensaje",mensaje);
+        long sumaMonto=movimientosService.obtenerSumaMontos();
+        model.addAttribute("SumaMontos", sumaMonto);//Mandamos la suma de todos los montos a la plantilla
         return "VerMovimientos"; //Llamamos al Html
     }
     @GetMapping("/AgregarMovimiento")//Controlador que nos lleva al templete donde podremos crear un nuevo movimiento
@@ -200,6 +202,17 @@ public class ControllerFull {
     public String movimientosPorEmpleado(@PathVariable("id")Integer id, Model model){
         List<MovimientoDinero> movlist = movimientosService.obtenerPorEmpleado(id);
         model.addAttribute("movlist",movlist);
+        Long sumaMonto=movimientosService.MontosPorEmpleado(id);
+        model.addAttribute("SumaMontos",sumaMonto);
+        return "verMovimientos";//Llamamos al html
+    }
+
+    @GetMapping("/Empresa/{id}/Movimientos")//Filtro de Movimientos por empresa
+    public String movimientosPorEmpresa(@PathVariable("id")Integer id, Model model){
+        List<MovimientoDinero> movlist = movimientosService.obtenerPorEmpresa(id);
+        model.addAttribute("movlist",movlist);
+        Long sumaMonto=movimientosService.MontosPorEmpresa(id);
+        model.addAttribute("SumaMontos",sumaMonto);
         return "verMovimientos";//Llamamos al html
     }
 
