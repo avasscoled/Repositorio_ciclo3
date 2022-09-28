@@ -13,51 +13,57 @@ public class MovimientosService {
     @Autowired
     MovimientosRepository movimientosRepository;
 
-    // Metodo que muestra todos los movimientos sin filtro
-    public List<MovimientoDinero> getAllMovimientos(){
-        List<MovimientoDinero> movimientosList= new ArrayList<>();
-        movimientosRepository.findAll().forEach(movimiento -> movimientosList.add(movimiento));
+    public List<MovimientoDinero> getAllMovimientos(){ //Metodo que me muestra todos los movimientos sin ningn filtro
+        List<MovimientoDinero> movimientosList = new ArrayList<>();
+        movimientosRepository.findAll().forEach(movimiento -> movimientosList.add(movimiento));  //Recorremos el iterable que regresa el metodo findAll del Jpa y lo guardamos en la lista creada
         return movimientosList;
     }
-    //Metodo para buscar movimientos por id
-    public MovimientoDinero getMovimientoById(Integer id){
+
+    public MovimientoDinero getMovimientoById(Integer id){ //Ver movimientos por id
         return movimientosRepository.findById(id).get();
     }
-    //Metodo para guardar o actualizar
-    public boolean saveOrUpdateMovimiento(MovimientoDinero movimientoDinero){
+
+    public boolean saveOrUpdateMovimiento(MovimientoDinero movimientoDinero){ //Guardar o actualizar elementos
         MovimientoDinero mov=movimientosRepository.save(movimientoDinero);
-        if(movimientosRepository.findById(mov.getId())!=null){
+        if (movimientosRepository.findById(mov.getId())!=null){
             return true;
         }
         return false;
     }
-    //Metodo para eliminar un movimiento por Id
-    public boolean deleteMovimiento(Integer id){
-        movimientosRepository.deleteById(id);
-        if (this.movimientosRepository.findById(id).isPresent()){
+
+    public boolean deleteMovimiento(Integer id){ //Eliminar movimiento por id
+        movimientosRepository.deleteById(id); //Eliminar usando el metodo que nos ofrece el repositorio
+        if(this.movimientosRepository.findById(id).isPresent()){ //Si al buscar el movimiento lo encontramos, no se eliminó (false)
             return false;
         }
-        return true;
+        return true; //Si al buscar el movimiento no lo encontramos, si lo eliminò (true)
     }
-    public ArrayList<MovimientoDinero> obtenerPorEmpleado(Integer id){
+
+    public ArrayList<MovimientoDinero> obtenerPorEmpleado(Integer id) { //Obterner teniendo en cuenta el id del empleado
         return movimientosRepository.findByEmpleado(id);
     }
-    public ArrayList<MovimientoDinero> obtenerPorEmpresa(Integer id){
+
+    public ArrayList<MovimientoDinero> obtenerPorEmpresa(Integer id) { //Obtener movimientos teniendo en cuenta el id de la empresa a la que pertencen los empleados que la registraron
         return movimientosRepository.findByEmpresa(id);
     }
 
-       //Servicio para ver la suma de todos los montos
-       public long obtenerSumaMontos(){
-          return movimientosRepository.SumarMonto();
-       }
+    //Servicio para ver la suma de todos los montos
+    public Long obtenerSumaMontos(){
+        return movimientosRepository.SumarMonto();
+    }
 
-    //Servicio para ver la suma de todos los montos por empleado
-    public long MontosPorEmpleado(Integer id){
+    //Servicio para ver la suma de los montos por empleado
+    public Long MontosPorEmpleado(Integer id){
         return movimientosRepository.MontosPorEmpleado(id);
     }
 
-    //Servicio para ver la suma de todos los montos por empresa
-    public long MontosPorEmpresa(Integer id){
-        return movimientosRepository.MontosPorEmpresas(id);
+    //Servicio para ver la suma de los montos por empresa
+    public Long MontosPorEmpresa(Integer id){
+        return movimientosRepository.MontosPorEmpresa(id);
+    }
+
+    //servicio que nos deja conseguir el id de un empleado si tenemos su correo
+    public Integer IdPorCorreo(String Correo){
+        return movimientosRepository.IdPorCorreo(Correo);
     }
 }
